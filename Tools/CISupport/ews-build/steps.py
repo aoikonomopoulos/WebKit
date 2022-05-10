@@ -578,6 +578,7 @@ class CheckOutSource(git.Git):
     def __init__(self, repourl='https://github.com/WebKit/WebKit.git', **kwargs):
         super(CheckOutSource, self).__init__(repourl=repourl,
                                              retry=self.CHECKOUT_DELAY_AND_MAX_RETRIES_PAIR,
+                                             retryFetch=True,
                                              timeout=2 * 60 * 60,
                                              alwaysUseLatest=True,
                                              logEnviron=False,
