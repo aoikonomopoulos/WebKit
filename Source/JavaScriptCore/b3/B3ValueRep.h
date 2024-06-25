@@ -129,7 +129,19 @@ public:
     ValueRep(Kind kind)
         : m_kind(kind)
     {
-        ASSERT(kind == WarmAny || kind == ColdAny || kind == LateColdAny || kind == SomeRegister || kind == SomeRegisterWithClobber || kind == SomeEarlyRegister || kind == SomeLateRegister);
+        ASSERT(kind == WarmAny
+            || kind == ColdAny
+            || kind == LateColdAny
+            || kind == SomeRegister
+            || kind == SomeRegisterWithClobber
+            || kind == SomeEarlyRegister
+            || kind == SomeLateRegister
+            || kind == SomeRegisterPair
+            || kind == SomeRegisterPairWithClobber
+            || kind == SomeEarlyRegisterPair
+            || kind == SomeLateRegisterPair
+            || kind == RegisterPair
+            || kind == LateRegisterPair);
     }
 
 #if ENABLE(WEBASSEMBLY)

@@ -17,8 +17,10 @@ let wat = `
 
 async function test() {
     let instance = await instantiate(wat);
-    if (instance.exports.test(44n, 22n, -3n) !== 105n)
-        throw new Error();
+    for (var i = 0; i < 10000; ++i) {
+        if (instance.exports.test(44n, 22n, -3n) !== 105n)
+            throw new Error();
+    }
 }
 
 await assert.asyncTest(test());
