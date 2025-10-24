@@ -43,6 +43,12 @@ function installDependencies {
 
     packageManager=$(guessPackageManager)
     source "$(dirname "$0")/dependencies/$packageManager"
+    if [ ! -z "$architecture" ]; then
+        last="$((${#PACKAGES[*]} - 1))"
+        for i in `seq 0 ${last}`; do
+            PACKAGES[$i]="${PACKAGES[$i]}:${architecture}"
+        done
+    fi
     installDependenciesWith${packageManager^} "$@"
 }
 
@@ -78,5 +84,13 @@ Alternatively, you may use a Python 2.x virtualenv while hacking on WPE:
 
 EOF
 }
+
+while getopts "a:" opt; do
+    case $opt in
+        "a") architecture="$OPTARG" ;;
+        *) echo "Unrecognized option $opt" 1>&2; exit 2
+    esac
+done
+shift $(($OPTIND - 1))
 
 installDependencies "$@"
