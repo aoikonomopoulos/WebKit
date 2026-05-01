@@ -37,7 +37,9 @@ void registerNotifyCallback(ASCIILiteral notifyID, Function<void()>&& callback)
     auto adapter = [callback = WTF::move(callback)]() {
         callback();
     };
-    WTF::NotificationPoint::create(notifyID, WTF::move(adapter));
+    auto point = WTF::NotificationPoint::create(notifyID, WTF::move(adapter));
+    if (point.has_value())
+        (void)point.value().leakRef();
 #else
     UNUSED_PARAM(notifyID);
     UNUSED_PARAM(callback);

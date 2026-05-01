@@ -1576,7 +1576,7 @@ void NetworkProcess::notifyMediaStreamingActivity(bool activity)
     if (!m_mediaStreamingActivityNotificationPoint) {
         auto point = NotificationPoint::create(notifyMediaStreamingName, nullptr);
         if (point.has_value())
-            m_mediaStreamingActivityNotificationPoint = adoptRef(point.value());
+            m_mediaStreamingActivityNotificationPoint = point.value();
         else {
             RELEASE_LOG_ERROR(IPC, "NotificationPoint::create() for %s failed with status (%d)", notifyMediaStreamingName.characters(), static_cast<int>(point.error()));
             return;

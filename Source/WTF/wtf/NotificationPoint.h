@@ -28,6 +28,7 @@
 #include <wtf/Platform.h>
 #include <wtf/ThreadSafeRefCounted.h>
 #include <wtf/Vector.h>
+#include <wtf/RefPtr.h>
 #include <wtf/WeakPtr.h>
 #include <wtf/text/MakeString.h>
 #include <wtf/text/WTFString.h>
@@ -60,8 +61,8 @@ public:
         PermissionError,
         Other,
     };
-    WTF_EXPORT_PRIVATE static Expected<NotificationPoint*, Error> create(ASCIILiteral providedPath, Function<void()>&& callback);
-    WTF_EXPORT_PRIVATE static Expected<NotificationPoint*, Error> createWithName(ASCIILiteral name, ASCIILiteral providedPath, Function<void()>&& callback = nullptr);
+    WTF_EXPORT_PRIVATE static Expected<RefPtr<NotificationPoint>, Error> create(ASCIILiteral providedPath, Function<void()>&& callback);
+    WTF_EXPORT_PRIVATE static Expected<RefPtr<NotificationPoint>, Error> createWithName(ASCIILiteral name, ASCIILiteral providedPath, Function<void()>&& callback = nullptr);
     WTF_EXPORT_PRIVATE Expected<bool, Error> getAndClearNotificationsPosted();
     bool isLive() const;
     WTF_EXPORT_PRIVATE ~NotificationPoint();

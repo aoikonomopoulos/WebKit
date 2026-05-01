@@ -128,9 +128,11 @@ Cache::Cache(NetworkProcess& networkProcess, const String& storageDirectory, Ref
     if (options.contains(CacheOption::RegisterNotify)) {
 #if HAVE(NOTIFICATIONPOINT)
         // Triggers with "notifyutil -p com.apple.WebKit.Cache.dump".
-        NotificationPoint::create("Cache.dump"_s, [this]() {
+        auto point = NotificationPoint::create("Cache.dump"_s, [this]() {
             dumpContentsToFile();
         });
+        if (point.has_value())
+            (void)point.value().leakRef();
 #endif
     }
 }

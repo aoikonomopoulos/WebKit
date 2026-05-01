@@ -61,12 +61,12 @@ const String& NotificationPoint::key() const
     return m_key;
 }
 
-Expected<NotificationPoint*, NotificationPoint::Error> NotificationPoint::create(ASCIILiteral path, Function<void()>&& callback)
+Expected<RefPtr<NotificationPoint>, NotificationPoint::Error> NotificationPoint::create(ASCIILiteral path, Function<void()>&& callback)
 {
     return createWithName("com.apple.WebKit"_s, path, WTF::move(callback));
 }
 
-Expected<NotificationPoint*, NotificationPoint::Error> NotificationPoint::createWithName(ASCIILiteral name, ASCIILiteral path, Function<void()>&& callback)
+Expected<RefPtr<NotificationPoint>, NotificationPoint::Error> NotificationPoint::createWithName(ASCIILiteral name, ASCIILiteral path, Function<void()>&& callback)
 {
     auto key = makeString(name, '.', path);
     int token = NOTIFY_TOKEN_INVALID, ret;
@@ -81,7 +81,7 @@ Expected<NotificationPoint*, NotificationPoint::Error> NotificationPoint::create
         ret = notify_register_check(key.utf8().data(), &token);
     if (ret)
         return makeUnexpected(fromPlatformStatus(ret));
-    return new NotificationPoint(key, token);
+    return adoptRef(new NotificationPoint(key, token));
 }
 
 NotificationPoint::~NotificationPoint()

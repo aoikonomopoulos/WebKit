@@ -105,7 +105,7 @@ public:
         // setState.
         auto result = NotificationPoint::createWithName(TEST_NOTIFICATION_POINT_OWNER, "internal"_s, WTF::move(cb));
         ASSERT_TRUE(result.has_value());
-        RefPtr<NotificationPoint> point = adoptRef(result.value());
+        RefPtr<NotificationPoint> point = result.value();
         point->notify();
         waitForNotification();
     }
@@ -150,7 +150,7 @@ TEST(WTF, TestNotificationPointNotify)
             };
             auto result = NotificationPoint::createWithName(TEST_NOTIFICATION_POINT_OWNER, "test"_s, WTF::move(f));
             ASSERT_TRUE(result.has_value());
-            point = adoptRef(result.value());
+            point = result.value();
             executor.waitForNotificationPointToGoLive(point);
         });
         executor.run([&] {
@@ -173,7 +173,7 @@ TEST(WTF, TestNotificationPointState)
         executor.run([&] {
             auto result = NotificationPoint::createWithName(TEST_NOTIFICATION_POINT_OWNER, path, nullptr);
             ASSERT_TRUE(result.has_value());
-            point = adoptRef(result.value());
+            point = result.value();
             executor.waitForNotificationPointToGoLive(point);
         });
         executor.run([&] {
@@ -218,7 +218,7 @@ TEST(WTF, TestNotificationPointStateWithCallback)
         executor.run([&] {
             auto result = NotificationPoint::createWithName(TEST_NOTIFICATION_POINT_OWNER, path, WTF::move(callback));
             ASSERT_TRUE(result.has_value());
-            point = adoptRef(result.value());
+            point = result.value();
             executor.waitForNotificationPointToGoLive(point);
         });
         executor.run([&] {
@@ -259,7 +259,7 @@ TEST(WTF, TestNotificationPointPendingNotifications)
         executor.run([&] {
             auto result = NotificationPoint::createWithName(TEST_NOTIFICATION_POINT_OWNER, path, nullptr);
             ASSERT_TRUE(result.has_value());
-            point = adoptRef(result.value());
+            point = result.value();
             executor.waitForNotificationPointToGoLive(point);
         });
         executor.run([&] {
@@ -322,14 +322,14 @@ TEST(WTF, TestNotificationPointSameNamePathWorks)
         executor.run([&] {
             auto result1 = NotificationPoint::createWithName(TEST_NOTIFICATION_POINT_OWNER, path, WTF::move(callback1));
             ASSERT_TRUE(result1.has_value());
-            point1 = adoptRef(result1.value());
+            point1 = result1.value();
             ASSERT_NE(point1, nullptr);
             // Immediately try to create a duplicate, without giving the point
             // time to register. This is handled asynchronously for glib, so
             // test the "pending NotificationPoint" path.
             auto result2 = NotificationPoint::createWithName(TEST_NOTIFICATION_POINT_OWNER, path, WTF::move(callback2));
             ASSERT_TRUE(result2.has_value());
-            point2 = adoptRef(result2.value());
+            point2 = result2.value();
             ASSERT_NE(point2, nullptr);
             executor.waitForNotificationPointToGoLive(point1);
             executor.waitForNotificationPointToGoLive(point2);
@@ -338,7 +338,7 @@ TEST(WTF, TestNotificationPointSameNamePathWorks)
             // Try to create a duplicate after point1 is certainly live.
             auto result3 = NotificationPoint::createWithName(TEST_NOTIFICATION_POINT_OWNER, path, WTF::move(callback3));
             ASSERT_TRUE(result3.has_value());
-            point3 = adoptRef(result3.value());
+            point3 = result3.value();
             ASSERT_NE(point3, nullptr);
             executor.waitForNotificationPointToGoLive(point3);
         });
@@ -391,7 +391,7 @@ TEST(WTF, TestNotificationPointPendingNotificationsWithCallback)
         executor.run([&] {
             auto result = NotificationPoint::createWithName(TEST_NOTIFICATION_POINT_OWNER, path, WTF::move(callback));
             ASSERT_TRUE(result.has_value());
-            point = adoptRef(result.value());
+            point = result.value();
             executor.waitForNotificationPointToGoLive(point);
         });
         executor.run([&] {
@@ -434,16 +434,16 @@ TEST(WTF, TestNotificationPointMultiple)
         auto executor = NotificationPointTestExecutor();
         auto point = NotificationPoint::createWithName(TEST_NOTIFICATION_POINT_OWNER "-0", "J0", nullptr);
         ASSERT_TRUE(point.has_value());
-        points.append(adoptRef(point.value()));
+        points.append(point.value());
         point = NotificationPoint::createWithName(TEST_NOTIFICATION_POINT_OWNER "-0", "J1", nullptr);
         ASSERT_TRUE(point.has_value());
-        points.append(adoptRef(point.value()));
+        points.append(point.value());
         point = NotificationPoint::createWithName(TEST_NOTIFICATION_POINT_OWNER "-1", "J0", nullptr);
         ASSERT_TRUE(point.has_value());
-        points.append(adoptRef(point.value()));
+        points.append(point.value());
         point = NotificationPoint::createWithName(TEST_NOTIFICATION_POINT_OWNER "-1", "J1", nullptr);
         ASSERT_TRUE(point.has_value());
-        points.append(adoptRef(point.value()));
+        points.append(point.value());
         // Test immediate destruction of the NotificationPoints. This exercises the
         // pendingNotificationPoints() destruction path in the glib implementation.
     }

@@ -420,9 +420,9 @@ WTF_ALLOW_UNSAFE_BUFFER_USAGE_END
 #if PLATFORM(COCOA)
             if (point.has_value())
                 dataLogF("<BYTECODE.STAT><%d> Use `notifyutil -v -p %s` to dump statistics.\n", pid, point.value()->key().utf8().data());
-#else
-            UNUSED_VARIABLE(point);
 #endif
+            if (point.has_value())
+                (void)point.value().leakRef();
         });
 #endif
 
