@@ -112,7 +112,7 @@ void Fuzzilli::initializeCoverage(uint32_t* start, uint32_t* stop)
 
 void Fuzzilli::readInput(Vector<char>* buffer)
 {
-    size_t inputSize;
+    uint64_t inputSize;
     READ_FROM_FUZZILLI(&inputSize, sizeof(inputSize));
     RELEASE_ASSERT(inputSize < REPRL_MAX_DATA_SIZE);
 
