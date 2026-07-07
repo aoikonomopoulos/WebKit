@@ -178,7 +178,8 @@ protected:
     // when the thread dies. These methods let you do this. You can override these methods, and you
     // can be sure that the default ones don't do anything (so you don't need a super call).
     virtual void threadDidStart();
-    virtual void threadIsStopping(const AbstractLocker&);
+    virtual void threadIsStopping(const AbstractLocker&, bool threadIsActive);
+    virtual void threadIsGoingToSleep(const AbstractLocker&);
 
     // Control whether this automatic thread should sleep when timeout happens.
     // By overriding this function, we can customize how automatic threads will sleep.

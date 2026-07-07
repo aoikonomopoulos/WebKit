@@ -322,7 +322,7 @@ private:
         Thread::registerGCThread(GCThreadType::Main);
     }
 
-    void threadIsStopping(const AbstractLocker&) final
+    void threadIsStopping(const AbstractLocker&, bool) final
     {
         m_heap.m_collectorThreadIsRunning = false;
     }

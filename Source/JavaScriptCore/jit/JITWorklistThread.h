@@ -66,7 +66,8 @@ private:
 
     void threadDidStart() final;
 
-    void threadIsStopping(const AbstractLocker&) final;
+    void threadIsStopping(const AbstractLocker&, bool) final;
+    void threadIsGoingToSleep(const AbstractLocker&) final;
 
     Lock m_rightToRun;
     JITWorklist& m_worklist;

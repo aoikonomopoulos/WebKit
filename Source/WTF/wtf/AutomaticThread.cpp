@@ -194,6 +194,7 @@ void AutomaticThread::start(const AbstractLocker&)
             
             RefPtr<AutomaticThread> thread = preserveThisForThread;
             thread->threadDidStart();
+            bool threadIsActive = true;
             
             if (ASSERT_ENABLED) {
                 Locker locker { *m_lock };
@@ -201,7 +202,7 @@ void AutomaticThread::start(const AbstractLocker&)
             }
             
             auto stopImpl = [&] (const AbstractLocker& locker) {
-                thread->threadIsStopping(locker);
+                thread->threadIsStopping(locker, threadIsActive);
                 thread->m_hasUnderlyingThread = false;
             };
             
@@ -237,10 +238,17 @@ void AutomaticThread::start(const AbstractLocker&)
                             return stopPermanently(locker);
                         RELEASE_ASSERT(result == PollResult::Wait);
 
+                        threadIsActive = false;
+                        thread->threadIsGoingToSleep(locker);
                         // Shut the thread down after a timeout.
                         m_isWaiting = true;
                         bool awokenByNotify =
                             m_waitCondition.waitFor(*m_lock, m_timeout);
+
+                        // If we've been awokenByNotify, that means we're
+                        // counted as an active thread and stopping the thread
+                        // should reduce the number of active threads.
+                        threadIsActive = awokenByNotify;
                         if (m_temporaryStopRequested)
                             return stopTemporarily(locker);
                         if (verbose && !awokenByNotify && !m_isWaiting)
@@ -271,7 +279,11 @@ void AutomaticThread::threadDidStart()
 {
 }
 
-void AutomaticThread::threadIsStopping(const AbstractLocker&)
+void AutomaticThread::threadIsStopping(const AbstractLocker&, bool)
+{
+}
+
+void AutomaticThread::threadIsGoingToSleep(const AbstractLocker&)
 {
 }
 

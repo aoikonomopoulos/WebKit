@@ -119,8 +119,6 @@ auto JITWorklistThread::poll(const AbstractLocker& locker) -> PollResult
         m_worklist.m_ongoingCompilationsPerTier[i]++;
         return PollResult::Work;
     }
-    RELEASE_ASSERT(m_worklist.m_numberOfActiveThreads);
-    m_worklist.m_numberOfActiveThreads--;
     return PollResult::Wait;
 }
 
@@ -176,11 +174,19 @@ void JITWorklistThread::threadDidStart()
 
 }
 
-void JITWorklistThread::threadIsStopping(const AbstractLocker&)
+void JITWorklistThread::threadIsStopping(const AbstractLocker& locker, bool threadIsActive)
 {
     dataLogLnIf(Options::verboseCompilationQueue(), m_worklist, ": Thread will stop");
     ASSERT(!m_plan);
     m_plan = nullptr;
+    if (threadIsActive)
+        threadIsGoingToSleep(locker);
+}
+
+void JITWorklistThread::threadIsGoingToSleep(const AbstractLocker&)
+{
+    RELEASE_ASSERT(m_worklist.m_numberOfActiveThreads);
+    m_worklist.m_numberOfActiveThreads--;
 }
 
 } // namespace JSC

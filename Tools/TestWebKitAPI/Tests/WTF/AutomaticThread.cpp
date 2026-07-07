@@ -164,7 +164,7 @@ private:
         ++m_started;
         m_runningCondition.notifyAll();
     }
-    void threadIsStopping(const AbstractLocker&)
+    void threadIsStopping(const AbstractLocker&, bool)
     {
         Locker locker { m_lock };
         ++m_stopped;

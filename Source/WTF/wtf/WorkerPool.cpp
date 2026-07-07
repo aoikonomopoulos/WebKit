@@ -77,7 +77,7 @@ public:
     }
 
     // Called with the lock held.
-    void NODELETE threadIsStopping(const AbstractLocker&) final
+    void NODELETE threadIsStopping(const AbstractLocker&, bool) final
     {
         ASSERT(m_pool);
         m_pool->m_numberOfActiveWorkers--;
